@@ -11,7 +11,7 @@ while(!wrapper.IsCompleted)
     Thread.Sleep(100);
 }
 
-Console.WriteLine($"\nРезультат асинхронной операции: {wrapper.Result:N}");
+Console.WriteLine($"\nРезультат асинхронной операции: {wrapper.Result}");
 Console.WriteLine($"Программа закончила свою работу.");
 
 int Calculate(object sleepTime)

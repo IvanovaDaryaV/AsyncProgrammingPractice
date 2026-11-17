@@ -22,13 +22,13 @@ public class ThreadWrapper<TResult>
 
     private TResult? _result;
     private readonly Func<object, TResult> _func;
-    private Thread _thread;
+    private Thread? _thread;
 
     public ThreadWrapper(Func<object, TResult> func){
         _func = func ?? throw new ArgumentNullException(nameof(func));
         _result = default;
     }
-    public TResult? Result
+    public TResult Result
     {
         get
         {
@@ -37,16 +37,21 @@ public class ThreadWrapper<TResult>
                 Thread.Sleep(150);
             }
 
-            return this.IsSuccess && this.Exception == null ? _result : throw Exception;
+            if (this.Exception != null)
+            {
+                throw this.Exception;
+            }
+
+            return _result!;
         }
     }
 
     /// <summary>
-    /// Запускает делегат Action<object> в отдельном потоке Thread. 
+    /// Запускает делегат Func<object, TResult> в отдельном потоке Thread. 
     /// </summary>
     public void Start(object arg)
     {
-        _thread = new Thread(new ParameterizedThreadStart(async x =>
+        _thread = new Thread(new ParameterizedThreadStart(x =>
         {
             try
             {
