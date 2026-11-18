@@ -1,13 +1,17 @@
 ﻿Console.WriteLine("Для запуска нажмите любую клавишу");
 Console.ReadKey();
 
-var result = WriteCharAsync('!');
+var task = WriteCharAsync('!');
 
-for (int i = 0; i < 160; i++)
+while(!task.IsCompleted)
 {
-    Console.WriteLine("$");
+    Console.Write("$");
     Thread.Sleep(500);
 }
+
+task.Wait(); // гарантирует, что задача завершилась
+
+Console.WriteLine("\nМетод Main закончил свою работу");
 
 Task WriteCharAsync(object symbol)
 {
@@ -20,7 +24,7 @@ static void WriteChar(object symbol)
 
     for (int i = 0; i < 160; i++)
     {
-        Console.WriteLine(item);
+        Console.Write(item);
         Thread.Sleep(500);
     }
 }
